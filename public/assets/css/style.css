@@ -819,6 +819,23 @@ a.text-light:hover {
   opacity: 0.72;
 }
 
+/* Ensure service description uses full width and left-aligned text */
+.service-desc {
+  width: 100% !important;
+  max-width: 100% !important;
+  text-align: left !important;
+  color: #666;
+}
+.service-desc p,
+.service-desc div {
+  margin: 0;
+  text-align: left !important;
+}
+.card-body.d-flex .service-desc {
+  /* make sure flex container doesn't shrink the description */
+  flex: 1 1 auto;
+}
+
 .breadcrumb-item + .breadcrumb-item::before {
   color: inherit;
 }

@@ -636,15 +636,18 @@ export default function Home() {
     ],
   };
 
-  const getHomeData = async () => {
+ const getHomeData = async () => {
   try {
     const [
+      blogsRes,
       testimonialRes,
       productsRes,
       servicesRes,
       whyChooseRes,
     ] = await Promise.all([
-      
+
+      api.get("/api/blogs?populate=*&sort[0]=createdAt:desc"),
+
       api.get("/api/contents?filters[content_type][$eq]=Testimonialpart&sort[0]=createdAt:desc"),
 
       api.get("/api/contents?filters[content_type][$eq]=Home Products&sort[0]=createdAt:desc"),
@@ -654,6 +657,7 @@ export default function Home() {
       api.get("/api/contents?filters[content_type][$eq]=Why Choose Us&sort[0]=createdAt:desc"),
     ]);
 
+    setBlogs(blogsRes?.data?.data || []);
     setTestimonials(testimonialRes?.data?.data || []);
     setProducts(productsRes?.data?.data || []);
     setServices(servicesRes?.data?.data || []);
@@ -841,25 +845,19 @@ export default function Home() {
                 Our Services
               </h2>
             </div>
-
-            {services.map((data) => (
-              <div
-                key={data.id}
-                onClick={() => {
-                  getServiceDetail(data.title);
-                }}
-                className="col-lg-3 col-sm-6 mb-4 mb-lg-0"
-                data-aos="fade-right"
-              >
-                <div className="card border-0 shadow rounded-xs pt-5 h-100">
-                  <div className="card-body">
-                    <i className="fa fa-desktop icon-lg icon-blue icon-bg-blue icon-bg-circle mb-3"></i>
-                    <h4 className="mt-4 mb-3">{data.title}</h4>
-                    <p>{ReactHtmlParser(data.description || "")}</p>
-                  </div>
-                </div>
+ {services.map(data=>(
+        <div onClick={()=>{getServiceDetail(data.title)}}  className="col-lg-3 col-sm-6 mb-4 mb-lg-0" data-aos="fade-right" >
+         
+            <div className="card border-0 shadow rounded-xs pt-5 h-100">
+              <div className="card-body">
+                <i className="fa fa-desktop icon-lg icon-blue icon-bg-blue icon-bg-circle mb-3"></i>
+                <h4 className="mt-4 mb-3">{data.title}</h4>
+                {/* <p>{ReactHtmlParser(data.description)}</p> */}
               </div>
-            ))}
+            </div>
+        
+      </div>
+      ))}
           </div>
         </div>
         <img src="/assets/images/dot/dot-1.png" className="img-fluid feature-bg-shape-1" alt="background-dots" />
